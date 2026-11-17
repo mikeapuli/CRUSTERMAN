@@ -1,0 +1,87 @@
+# Builds the CRUSTERMAN firmware package (.fwsc) for the M-VAVE FM-1 and attaches it to the run as an artifact.
+# Run it from the Actions tab ("Run workflow"), or push to main.
+#
+# The JieLi toolchain and the three AC79 SDK files are downloaded from JieLi's servers (see BUILDING.md) and cached,
+# so later runs don't depend on those servers being reachable.
+name: build
+on:
+  push:
+    branches: [main, crusterman]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version X.Y (empty: a DEV build)"
+        required: false
+        default: ""
+
+jobs:
+  firmware:
+    runs-on: ubuntu-latest
+    env:
+      JIELI_TOOLCHAIN: /home/runner/.jieli/toolchain
+      AC79_SDK: /home/runner/fw-AC79_AIoT_SDK
+      # each compiler call in a debian:bookworm-slim container, as the build does on macOS (the toolchain is an old
+      # clang: this keeps it off the runner's own libraries). Remove the line to run it natively instead.
+      JIELI_DOCKER: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install Pillow
+
+      - name: Cache the JieLi toolchain and SDK files
+        id: jieli
+        uses: actions/cache@v4
+        with:
+          path: |
+            /home/runner/.jieli
+            /home/runner/fw-AC79_AIoT_SDK/cpu/wl82/tools
+          key: jieli-toolchain-ac79-v1.2.1-1
+
+      - name: Download the JieLi toolchain
+        if: steps.jieli.outputs.cache-hit != 'true'
+        run: sh tools/get_toolchain.sh
+
+      - name: Download the AC79 SDK files
+        if: steps.jieli.outputs.cache-hit != 'true'
+        run: |
+          rm -rf "$AC79_SDK"
+          git clone --depth 1 --branch AC79NN_SDK_V1.2.1_2023-12-13 \
+            https://gitee.com/Jieli-Tech/fw-AC79_AIoT_SDK.git "$AC79_SDK"
+          # keep only what the package needs (and what the cache stores)
+          find "$AC79_SDK" -mindepth 1 -maxdepth 1 ! -name cpu -exec rm -rf {} +
+
+      - name: Engine checks (the recipes, the engine unchanged, the new controls)
+        run: |
+          set -e
+          mkdir -p build/host build/scenarios
+          CC="cc -D_GNU_SOURCE -O2 -ffp-contract=off -std=c99 -Wall -Wextra -Wdouble-promotion -Werror -DEN_HOST -Ifirmware/src/dsp"
+          $CC -o build/host/crust_test tests/host/crust_test.c firmware/src/dsp/amb.c -lm
+          build/host/crust_test
+          $CC -DEN_REF_PIECES -o build/host/golden_test tests/host/golden_test.c firmware/src/dsp/amb.c -lm
+          build/host/golden_test
+          sh host/build_host.sh
+          for s in tests/crusterman/*.amb; do
+            n=$(basename "$s" .amb)
+            mkdir -p "build/scenarios/crusterman-$n"
+            build/host/amb_host "$s" "build/scenarios/crusterman-$n"
+          done
+
+      - name: Build the firmware
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [ -n "$VERSION" ]; then
+            sh build.sh --release "$VERSION"
+          else
+            sh build.sh
+          fi
+          ls -l build/*.fwsc
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: crusterman-firmware
+          path: build/*.fwsc
+          if-no-files-found: error

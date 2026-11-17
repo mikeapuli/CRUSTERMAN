@@ -1,0 +1,21 @@
+# (CRUSTERMAN) PERFORM's black 10 (key 22): the bar from its top, now. At 72 a sixteenth is 208 ms: 700 ms into bar 3
+# the grid has played 35 sixteenths; the downbeat puts it back on 32 (and plays that one at once)
+wait 300
+tap SEL
+bar 2
+wait 700
+expect sixteenths >34
+expect sixteenths <37
+tapkey 22
+wait 60
+expect sixteenths >32
+expect sixteenths <35
+expect playing 1
+# past the middle of the bar: the next bar line, early (bar 4 begins at 64; 2300 ms on from 33: about 44, to 48)
+wait 2300
+expect sixteenths >42
+expect sixteenths <46
+tapkey 22
+wait 60
+expect sixteenths >48
+expect sixteenths <51

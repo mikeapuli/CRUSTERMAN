@@ -1,0 +1,60 @@
+# (CRUSTERMAN) the ten companions: each there, in NACHTFAHRT's piece's key, between 60 and 74 (par18 Tempo, par19 Root,
+# par20 Mode: 1 Dorian, 2 Phrygian, 5 Aeolian, 6 Pent maj, 7 Pent min; par101 Lead in: 66 Wait)
+wait 500
+expect piece 0
+expect playing 1
+expect par18 72
+expect par19 2
+expect par20 5
+turn PRESET 1
+wait 300
+expect piece 1
+expect par18 60
+expect par19 10
+expect par20 1
+expect par101 66
+turn PRESET 1
+wait 300
+expect par18 74
+expect par19 2
+turn PRESET 1
+wait 300
+expect par18 72
+expect par19 5
+turn PRESET 1
+wait 300
+expect par18 69
+expect par19 4
+expect par101 66
+turn PRESET 1
+wait 300
+expect par18 65
+expect par19 2
+expect par20 6
+turn PRESET 1
+wait 300
+expect par18 63
+expect par19 6
+expect par20 7
+turn PRESET 1
+wait 300
+expect par18 70
+expect par19 0
+expect par20 2
+expect par101 66
+turn PRESET 1
+wait 300
+expect piece 8
+expect par18 60
+expect par19 10
+expect par101 66
+turn PRESET 1
+wait 300
+expect piece 9
+expect par18 60
+expect par19 6
+expect par20 6
+expect par101 66
+turn PRESET 1
+wait 300
+expect piece 0

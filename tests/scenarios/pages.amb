@@ -5,7 +5,7 @@ wait 200
 listen
 wait 300
 expect view 0
-said Nachtfahrt page: Filter Off, Evolve 40, Motion 45, Drift
+said Crusterman page: Filter Off, Evolve 40, Motion 45, Drift
 tap HOME
 wait 300
 expect view 18
@@ -105,6 +105,10 @@ turn K1 -1
 wait 300
 # (fm1-nachtfahrt #3) at Lead in's top, Off: the Lead plays only the keys and MIDI in; back to 32
 spin K1 40
+wait 300
+# (CRUSTERMAN) above Off, Wait: the Lead silent till the keys play, then its answers; a detent back, Off
+said Lead in Wait
+spin K1 -1
 wait 300
 said Lead in Off
 shot arc_lead_off.png

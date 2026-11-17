@@ -57,7 +57,7 @@ static const en_param_t PARAMS[P_NPARAMS] = {
     {"Octaves 2", -32768, 32767, 0},  {"Skips", -32768, 32767, 0},
     {"Accents", -32768, 32767, 0},   {"Accents 2", -32768, 32767, 0},   {"Seq2 intro", 0, 64, 0},
     {"Lead intro", 0, 64, 0},    {"Seq2 width", 0, 100, 20},
-    {"Chance", 0, 100, 100}, {"Chance 2", 0, 100, 100}, {"Lead in", 0, EN_LDIN_OFF, 16}, {"Seq2 time", 0, 100, 50},
+    {"Chance", 0, 100, 100}, {"Chance 2", 0, 100, 100}, {"Lead in", 0, EN_LDIN_WAIT, 16}, {"Seq2 time", 0, 100, 50},
     {"Seq2 rate", 0, 100, 30},
     {"Accent", 0, 100, 50}, {"Seq play", 0, 1, 0},
     {"Noise tone", -50, 50, 0}, {"Noise density", -50, 50, 0}, {"Air", -50, 50, 0}, {"Noise drift", -50, 50, 0},
@@ -97,6 +97,10 @@ int en_voice_shake_n(int p)
  *  is Sweep); the Lead's Width kept low; Bridge the middle section's move. Memory: how much the Lead keeps its ideas,
  *  the Lead's memory spec 3.3's starting values, to tune by ear; every piece's set, Mirage's 50 the default too, so
  *  the table reads whole) */
+#ifdef EN_REF_PIECES
+/* (CRUSTERMAN) NACHTFAHRT's ten recipes, as they were: host tests only (tests/run_tests.sh builds the engine's tests
+ * with them, so every test of the engine written against them still says what it said, and the golden hashes show
+ * the engine itself unchanged). Never in the firmware */
 static const int16_t PC_TIMEWIND[] = {        /* Schulze, Bayreuth Return: an organ through the phaser; Sequence 2
                                                 * at its default 60 and the reverb at 50, the lengths 16/15 (the user's
                                                 * ear) */
@@ -228,6 +232,143 @@ static const struct {
     {"Stratosfear", PC_STRATOSFEAR}, {"Sunrain", PC_SUNRAIN}, {"Mirage", PC_MIRAGE}, {"Cyborg", PC_CYBORG},
     {"Sakura Rain", PC_SAKURA}, {"Umeda", PC_UMEDA},
 };
+#else
+/* (CRUSTERMAN) the pieces: ten companions, one for each of NACHTFAHRT's ten, slot for slot. Unit A plays NACHTFAHRT's
+ * piece N, unit B this fork's piece N: the same root, the same scale or a subset of it (so the two can never clash,
+ * each walking its own chords), the opposite role, register and voice, sequence lengths that don't divide the
+ * other's. All between 60 and 74 (the set is played under 80, with no clock between the units): slow attacks, sparse
+ * notes, nothing that needs the two grids to meet. Lead in at Wait where NACHTFAHRT's Lead is forward: this unit's
+ * Lead silent till the keys play, then answering. */
+static const int16_t PC_LEEWARD[] = {         /* for Timewind (D minor, an organ through the phaser, 16/15, Wind): out
+                                                * of the wind. Strings, glass lines of 13 and 11 an octave up, a flute */
+    P_TEMPO, 72, P_ROOT, 2, P_MODE, MODE_AEOLIAN,
+    P_SEQ, 65, P_SVOICE, 4, P_SEQOCT, 1, P_SEQLEN, 13, P_DENSITY, 35, P_DECAY, 60, P_CUTOFF, 50, P_MI1, 8,
+    P_SEQ2, 50, P_S2VOICE, 6, P_SEQ2OCT, 0, P_SEQ2LEN, 11, P_SCH1, 70, P_S2DEC, 55, P_MI3, 16,
+    P_CHORD, 65, P_CVOICE, 1, P_CATT, 80, P_CCOL, -15, P_PEDAL, 40, P_PHASER, 15, P_DRIFT, 3, P_PMODE, EN_WALK_HOME,
+    P_LEAD, 50, P_LVOICE, 2, P_LDENS, 30, P_LDIN, 8,
+    P_REVERB, 55, P_SIZE, 75,
+    P_MW0, 20, P_MR0, 20, P_MW2, 10, P_BRIDGE, 30,
+    P_ARC, 20, P_MOTION, 35, P_LMEM, 60, -1};
+static const int16_t PC_UNDERTOW[] = {        /* for Wahnfried (B flat Dorian, strings, a faint heartbeat, a theremin):
+                                                * the pulse under it. Plucked lines of 8 and 5, low, the Drone hardly
+                                                * more than its pedal, the Lead waiting */
+    P_TEMPO, 60, P_ROOT, 10, P_MODE, MODE_DORIAN,
+    P_SEQ, 75, P_SVOICE, 5, P_SEQOCT, -1, P_SEQLEN, 8, P_DENSITY, 55, P_DECAY, 50, P_MI1, 4,
+    P_SEQ2, 60, P_S2VOICE, 5, P_SEQ2OCT, -2, P_SEQ2LEN, 5, P_S2CUT, 55, P_MI3, 12,
+    P_CHORD, 40, P_CVOICE, 2, P_PEDAL, 90, P_CATT, 70, P_DRIFT, 3, P_PMODE, EN_WALK_HOME,
+    P_LEAD, 55, P_LVOICE, 4, P_GLIDE, 40, P_LDIN, EN_LDIN_WAIT,
+    P_ECHO, 60, P_FEEDBACK, 65,
+    P_MW0, 15, P_SWEEP, 40, P_MW3, 25, P_BRIDGE, 30,
+    P_ARC, 20, P_MOTION, 40, P_LMEM, 50, -1};
+static const int16_t PC_SLACKWATER[] = {      /* for Phaedra (D minor, a busy Moog bass, choir and flutes): the still
+                                                * water between tides. A horn drone whose filter is the movement, a
+                                                * few bells of 7 high up, no Sequence 2, a low gliding theremin, surf */
+    P_TEMPO, 74, P_ROOT, 2, P_MODE, MODE_AEOLIAN,
+    P_SEQ, 35, P_SVOICE, 7, P_SEQOCT, 1, P_SEQLEN, 7, P_DENSITY, 20, P_DECAY, 70, P_SCH0, 75, P_MI1, 16,
+    P_SEQ2, 0,
+    P_CHORD, 65, P_CVOICE, 2, P_CATT, 85, P_CCOL, -10, P_PEDAL, 80, P_PHASER, 30, P_DRIFT, 3, P_PMODE, EN_WALK_WANDER,
+    P_LEAD, 50, P_LVOICE, 3, P_LOCT, -1, P_GLIDE, 65, P_VIB, 50, P_LDENS, 25, P_LDIN, 12,
+    P_NCHAR, 2, P_CRACKLE, 6,
+    P_REVERB, 55, P_SIZE, 80,
+    P_MW0, 50, P_MT0, 70, P_MR0, 40, P_MW2, 10, P_MW4, 30, P_BRIDGE, 35,
+    P_ARC, 15, P_MOTION, 35, P_LMEM, 45, -1};
+static const int16_t PC_PHOSPHOR[] = {        /* for Rubycon (F minor, dark, the 2600 two octaves down): light on the
+                                                * water. Vibes of 5 and glass of 9 an octave up, a thin glass drone, a
+                                                * high flute, the second repeat a half note on */
+    P_TEMPO, 72, P_ROOT, 5, P_MODE, MODE_AEOLIAN,
+    P_SEQ, 70, P_SVOICE, 12, P_SEQOCT, 1, P_SEQLEN, 5, P_DENSITY, 45, P_DECAY, 65, P_CUTOFF, 65, P_MI1, 8,
+    P_SEQ2, 55, P_S2VOICE, 4, P_SEQ2OCT, 1, P_SEQ2LEN, 9, P_S2CUT, 70, P_SCH1, 60, P_MI3, 24,
+    P_TAPB, 40, P_TAPBT, 4,
+    P_CHORD, 50, P_CVOICE, 4, P_CCOL, 20, P_PEDAL, 20, P_CATT, 75, P_DRIFT, 4,
+    P_LEAD, 40, P_LVOICE, 2, P_LOCT, 1, P_LDENS, 25, P_LDIN, 16,
+    P_REVERB, 50, P_SIZE, 70,
+    P_MW0, 20, P_SWEEP, 35, P_MW3, 25, P_BRIDGE, 30,
+    P_ARC, 25, P_MOTION, 40, P_LMEM, 55, -1};
+static const int16_t PC_BEDROCK[] = {         /* for Stratosfear (E minor, bright, driving, the Lead forward): what it
+                                                * stands on. A Moog line of 6 two octaves down, dark saws, no Sequence 2,
+                                                * the Lead waiting */
+    P_TEMPO, 69, P_ROOT, 4, P_MODE, MODE_AEOLIAN,
+    P_SEQ, 70, P_SVOICE, 1, P_SEQOCT, -2, P_SEQLEN, 6, P_DENSITY, 40, P_CUTOFF, 30, P_DECAY, 55, P_SWEEP, 30, P_MI1, 8,
+    P_SEQ2, 0,
+    P_CHORD, 65, P_CVOICE, 3, P_CCOL, -25, P_CATT, 80, P_PEDAL, 75, P_PHASER, 45, P_DRIFT, 3, P_PMODE, EN_WALK_HOME,
+    P_LEAD, 50, P_LVOICE, 4, P_LOCT, -1, P_LDIN, EN_LDIN_WAIT,
+    P_ECHO, 45,
+    P_MW0, 40, P_MT0, 65, P_MR0, 35, P_BRIDGE, 40,
+    P_ARC, 20, P_MOTION, 35, P_LMEM, 50, -1};
+static const int16_t PC_SALTPAN[] = {         /* for Sunrain (D major, both repeats at full, bright strings, surf): dry.
+                                                * D major pentatonic (no fourth, no seventh: nothing to rub against),
+                                                * marimbas of 7 and 5 with hardly an echo, a quiet organ, a reed */
+    P_TEMPO, 65, P_ROOT, 2, P_MODE, MODE_PENT_MAJ,
+    P_SEQ, 70, P_SVOICE, 11, P_SEQLEN, 7, P_DENSITY, 50, P_DECAY, 45, P_SQECHO, 15, P_SQREV, 30, P_TAPA, 30, P_MI1, 4,
+    P_SEQ2, 55, P_S2VOICE, 12, P_SEQ2OCT, -1, P_SEQ2LEN, 5, P_S2ECHO, 15, P_S2REV, 30, P_SCH1, 70, P_MI3, 8,
+    P_CHORD, 40, P_CVOICE, 0, P_PHASER, 0, P_CATT, 60, P_DRIFT, 4, P_PMODE, EN_WALK_HOME,
+    P_LEAD, 40, P_LVOICE, 6, P_LDENS, 30, P_LDIN, 16, P_LDECHO, 50,
+    P_ECHO, 30, P_REVERB, 30,
+    P_SWEEP, 25, P_MW3, 20, P_BRIDGE, 25,
+    P_ARC, 20, P_MOTION, 35, P_LMEM, 65, -1};
+static const int16_t PC_EMBER[] = {           /* for Mirage (F sharp minor, icy glass, sparse, a long reverb): warmth.
+                                                * F sharp minor pentatonic, a low dark organ, an electric piano of 5 an
+                                                * octave down, no Sequence 2, a low Mini, tape */
+    P_TEMPO, 63, P_ROOT, 6, P_MODE, MODE_PENT_MIN,
+    P_SEQ, 45, P_SVOICE, 8, P_SEQOCT, -1, P_SEQLEN, 5, P_DENSITY, 30, P_DECAY, 60, P_MI1, 12,
+    P_SEQ2, 0,
+    P_CHORD, 70, P_CVOICE, 0, P_CCOL, -20, P_PEDAL, 85, P_PHASER, 25, P_CATT, 70, P_DRIFT, 4, P_PMODE, EN_WALK_HOME,
+    P_LEAD, 45, P_LVOICE, 1, P_LOCT, -1, P_LATT, 40, P_GLIDE, 45, P_LDENS, 30, P_LDIN, 16,
+    P_NCHAR, 5, P_CRACKLE, 8,
+    P_REVERB, 40,
+    P_MW0, 30, P_MR0, 25, P_MW2, 10, P_MW4, 20, P_BRIDGE, 30,
+    P_ARC, 15, P_MOTION, 30, P_LMEM, 55, -1};
+static const int16_t PC_CARAPACE[] = {        /* for Cyborg (C Phrygian, organ drones beating, a quiet Sequence, no
+                                                * Sequence 2, the theremin up front): the shell round it. A low pulse
+                                                * of 5 and a pluck of 7, a long echo, hardly a drone, the Lead (a choir)
+                                                * waiting */
+    P_TEMPO, 70, P_ROOT, 0, P_MODE, MODE_PHRYGIAN,
+    P_SEQ, 75, P_SVOICE, 3, P_SEQOCT, -2, P_SEQLEN, 5, P_DENSITY, 45, P_CUTOFF, 35, P_MI1, 8,
+    P_SEQ2, 60, P_S2VOICE, 6, P_SEQ2OCT, -1, P_SEQ2LEN, 7, P_SCH1, 60, P_MI3, 16,
+    P_CHORD, 30, P_CVOICE, 4, P_PEDAL, 30, P_DRIFT, 4, P_PMODE, EN_WALK_HOME,
+    P_LEAD, 50, P_LVOICE, 8, P_LDIN, EN_LDIN_WAIT,
+    P_ECHO, 60, P_FEEDBACK, 70, P_ETIME, 4,
+    P_SWEEP, 45, P_MW3, 30, P_MR3, 35, P_BRIDGE, 35,
+    P_ARC, 25, P_MOTION, 40, P_LMEM, 40, -1};
+static const int16_t PC_PETRICHOR[] = {       /* for Sakura Rain (B flat Dorian, strings on the royal road, a low
+                                                * theremin): the smell after it. The same eight chords, looping, on a
+                                                * thin glass drone; keys of 6 an octave up; a flute that waits and
+                                                * answers; drops */
+    P_TEMPO, 60, P_ROOT, 10, P_MODE, MODE_DORIAN,
+    P_SEQ, 60, P_SVOICE, 6, P_SEQOCT, 1, P_SEQLEN, 6, P_DENSITY, 25, P_DECAY, 60, P_MI1, 16,
+    P_SEQ2, 0,
+    P_CHORD, 55, P_CVOICE, 4, P_CATT, 75, P_PEDAL, 25, P_DRIFT, 2,
+    P_PMODE, EN_WALK_FREE | EN_PLOOP,           /* (Sakura Rain's slots, as they are there) */
+    P_CR0, 1, P_CQ0, EN_CQ_MAJOR, P_CX0, EN_CX_MAJ7, P_CR1, 3, P_CQ1, EN_CQ_MAJOR, P_CX1, EN_CX_7,
+    P_CR2, 0, P_CQ2, EN_CQ_MINOR, P_CX2, EN_CX_7, P_CR3, 5, P_CQ3, EN_CQ_MINOR, P_CX3, EN_CX_7,
+    P_CR4, 1, P_CQ4, EN_CQ_MAJOR, P_CX4, EN_CX_MAJ7, P_CR5, 3, P_CQ5, EN_CQ_SUS4, P_CX5, EN_CX_9,
+    P_CR6, 0, P_CQ6, EN_CQ_MINOR, P_CX6, EN_CX_11, P_CR7, 10, P_CQ7, EN_CQ_MINOR, P_CX7, EN_CX_11,
+    P_LEAD, 55, P_LVOICE, 2, P_LDIN, EN_LDIN_WAIT,
+    P_NCHAR, 6, P_CRACKLE, 12,
+    P_REVERB, 50, P_SIZE, 70,
+    P_MW0, 25, P_MR0, 25, P_MW4, 25, P_BRIDGE, 25,
+    P_ARC, 15, P_MOTION, 30, P_LMEM, 50, -1};
+static const int16_t PC_TIDEPOOL[] = {        /* for Umeda (F sharp major pentatonic, the piano in the plaza): the water
+                                                * left behind. Water, a slow string pad, a few glass notes of 9, no
+                                                * Sequence 2, a soft high theremin that waits */
+    P_TEMPO, 60, P_ROOT, 6, P_MODE, MODE_PENT_MAJ,
+    P_SEQ, 40, P_SVOICE, 4, P_SEQOCT, 1, P_SEQLEN, 9, P_DENSITY, 10, P_DECAY, 75, P_SCH0, 50, P_MI1, 16,
+    P_SEQ2, 0,
+    P_CHORD, 75, P_CVOICE, 1, P_CATT, 90, P_CCOL, -10, P_PEDAL, 60, P_DRIFT, 4, P_PMODE, EN_WALK_HOME,
+    P_LEAD, 45, P_LVOICE, 3, P_LOCT, 0, P_GLIDE, 55, P_LATT, 35, P_LDIN, EN_LDIN_WAIT,
+    P_NCHAR, 9, P_CRACKLE, 30,
+    P_REVERB, 60, P_SIZE, 85,
+    P_MW0, 25, P_MR0, 20, P_MW4, 20, P_BRIDGE, 20,
+    P_ARC, 10, P_MOTION, 25, P_LMEM, 60, -1};
+static const struct {
+    const char *name;
+    const int16_t *set;
+} PIECES[EN_NPIECES] = {
+    {"Leeward", PC_LEEWARD}, {"Undertow", PC_UNDERTOW}, {"Slack Water", PC_SLACKWATER}, {"Phosphor", PC_PHOSPHOR},
+    {"Bedrock", PC_BEDROCK}, {"Salt Pan", PC_SALTPAN}, {"Ember", PC_EMBER}, {"Carapace", PC_CARAPACE},
+    {"Petrichor", PC_PETRICHOR}, {"Tide Pool", PC_TIDEPOOL},
+};
+#endif
 
 const char *en_piece_name(int i) { return PIECES[(unsigned)i < EN_NPIECES ? i : 0].name; }
 void en_piece(int i, int16_t *par, uint16_t *pool)
@@ -326,7 +467,9 @@ void en_param_text(int i, int v, char *b)
         s = EN_NOTE_NAME[(unsigned)v < 12u ? v : 0];
     else if (i == P_DRIFT && !en_drift_bars(v))
         s = "Hold";
-    else if (i == P_LDIN && v >= EN_LDIN_OFF)
+    else if (i == P_LDIN && v >= EN_LDIN_WAIT)
+        s = "Wait";                              /* (CRUSTERMAN: silent till the keys play, then its answers) */
+    else if (i == P_LDIN && v == EN_LDIN_OFF)
         s = "Off";                               /* (the keys and MIDI in only) */
     if (s) {
         int k = 0;
@@ -497,7 +640,7 @@ const char *en_chord_name(const int *pcs, int n, char *buf)
 }
 
 /* ------------------------------------------------------------ commands --- */
-enum { C_SET, C_POOL, C_PLAY, C_NEXT, C_FREEZE, C_SEED, C_PANIC, C_CLOCK, C_REGROW, C_MUTE, C_PERF, C_FX, C_SEQ, C_MACRO, C_PROT, C_REWALK, C_LOCK, C_SEQSET, C_LKEY, C_MOVE, C_LFORGET, C_THEME, C_LMIDI };
+enum { C_SET, C_POOL, C_PLAY, C_NEXT, C_FREEZE, C_SEED, C_PANIC, C_CLOCK, C_REGROW, C_MUTE, C_PERF, C_FX, C_SEQ, C_MACRO, C_PROT, C_REWALK, C_LOCK, C_SEQSET, C_LKEY, C_MOVE, C_LFORGET, C_THEME, C_LMIDI, C_SECTION, C_DOWNBEAT, C_CHORDDEG };
 #define QN 512u                                 /* (a piece is every parameter at once: room for twice over and more) */
 _Static_assert(QN >= 2u * (P_NPARAMS + 8), "the command queue can't hold a piece's parameters twice over");
 static uint32_t q[QN];
@@ -521,6 +664,11 @@ void en_panic(void) { post(C_PANIC, 0, 0); }
 void en_clock(int msg) { post(C_CLOCK, msg, 0); }
 void en_regrow(void) { post(C_REGROW, 0, 0); }
 void en_piece_theme(int i) { post(C_THEME, i, 0); }
+/* (CRUSTERMAN) the player's hand on the form: the arc to a section now, the bar from its top now, the chord to a
+ * degree of the scale now */
+void en_goto_section(int sec) { post(C_SECTION, sec, 0); }
+void en_downbeat(void) { post(C_DOWNBEAT, 0, 0); }
+void en_chord_deg(int d) { post(C_CHORDDEG, d, 0); }
 void en_mute(uint32_t m) { post(C_MUTE, (int)(m & 0xFFu), 0); }
 void en_perf(uint32_t f) { post(C_PERF, (int)(f & 0xFFu), 0); }
 void en_fx(uint32_t m) { post(C_FX, 0, (int)(m & 0xFFFFu)); }
@@ -3096,7 +3244,7 @@ static void ld_seed(void)
     ld_motif_t *m = &ld_bank[0];
     const int r = ld_cdeg(0);
     int i;
-    if (theme_pc != 9)
+    if (theme_pc != EN_THEME_PIECE)              /* (CRUSTERMAN: no piece has a written theme; Umeda's kept for one) */
         return;
     for (i = 0; i < 6; i++)
         m->off[i] = (int8_t)(UM_DEG[i] - r), m->dur[i] = UM_DUR[i];
@@ -3158,14 +3306,20 @@ static void lead_release(int id)
 static void lead_tick(void)                      /* a sixteenth: the phrase goes on, or the breath */
 {
     int planned = 0;
-    const int off = par[P_LDIN] >= EN_LDIN_OFF;  /* (Lead in Off: no phrase of its own begins, no answer, no theme
+    const int wait = par[P_LDIN] >= EN_LDIN_WAIT;   /* (CRUSTERMAN, Lead in Wait: the keys' figure is taken, answered
+                                                  * and grown from while its kinship lasts (Memory: 45 to 150 s), in any
+                                                  * section; then no phrase begins till the keys play again) */
+    const int keysonly = !wait && par[P_LDIN] >= EN_LDIN_OFF;   /* (Off: the keys' figure only played, not kept) */
+    const int lin = wait ? 0 : par[P_LDIN];
+    const int off = keysonly || (wait && ld_kin == 255 && !(ld_cap & (CP_ANS | CP_NEXT)));
+                                                 /* (Lead in Off: no phrase of its own begins, no answer, no theme
                                                   * taken from the keys; a phrase already playing ends as it would) */
     if (ar_cue) {                                /* the arc's moment for the theme (dropped, not kept, before Lead in; under
                                                   * Memory 20, the wandering end: a fresh motif every pair, but for a
                                                   * theme the player played; and while the theme is playing, its answer
                                                   * too) */
         ar_cue = 0;
-        if (!off && ar_sec != EN_SEC_EMERGE && ar_bar >= par[P_LDIN] &&
+        if (!off && (wait || ar_sec != EN_SEC_EMERGE) && ar_bar >= lin &&
             ((ld_blen ? ld_mem : par[P_LMEM]) >= 20 || (ld_bank[0].cm & LD_PLAYED)) &&
             !(ld_slot == 0 && ld_blen && (ld_pair < ld_blen || ld_due == 1 || ld_n)))
             ld_cb = 1;
@@ -3178,7 +3332,7 @@ static void lead_tick(void)                      /* a sixteenth: the phrase goes
         if (ld_key >= 0 && (ld_cap & CP_HELD))
             cp_du[cp_n - 1] = (uint8_t)(cp_du[cp_n - 1] < 32 ? cp_du[cp_n - 1] + 1 : 32);
         else if (++cp_q >= 8) {
-            if (off)
+            if (keysonly)
                 cp_n = cp_q = 0;                 /* (Off: the figure only played, not kept) */
             else
                 ld_take();
@@ -3195,7 +3349,7 @@ static void lead_tick(void)                      /* a sixteenth: the phrase goes
     } else if (!(sixteenth & 15u) && !ld_n) {    /* a bar line, between pairs */
         if (ld_rest)
             ld_rest--;
-        else if (!off && ar_sec != EN_SEC_EMERGE && ar_bar >= par[P_LDIN] && (ld_blen || ld_prep >= 4 || ld_next >= 0) &&
+        else if (!off && (wait || ar_sec != EN_SEC_EMERGE) && ar_bar >= lin && (ld_blen || ld_prep >= 4 || ld_next >= 0) &&
                  (ld_due || ld_cb || seq_rand(&ld_rng) % 100u < (uint32_t)(20 + 6 * pe(P_LDENS) / 10) /
                                                                    (ar_sec == EN_SEC_FLOW ? 3u : 1u)))
             lead_plan(), planned = 1;            /* (the block's next pair, or the theme due, at once; a block not
@@ -3259,6 +3413,31 @@ static void ld_cut(void)
 }
 
 /* ------------------------------------------------------- the bar line --- */
+/* (CRUSTERMAN) the arc to a section by hand, now: as ar_tick_bar's own change (the Bridge's move begun, Sequence 2's
+ * octave, the hand off the master actions, the Lead's theme cued for Solo and Bridge), its length the section's own;
+ * Emerge is the arc from its start (the intros closing and opening again; a piece with no Intro goes to Flow) */
+static void ar_goto(int sec)
+{
+    const uint8_t was = ar_sec;
+    if (sec == EN_SEC_EMERGE) {
+        ar_start();
+        return;
+    }
+    ar_sec = (uint8_t)((unsigned)sec < EN_NSEC ? sec : EN_SEC_FLOW);
+    ar_left = ar_sec_len();
+    if (ar_sec == EN_SEC_BRIDGE)
+        fo_bridge();
+    if (ar_sec != was) {
+        s2o_section();
+        am_held = 0;
+    }
+    if (ar_sec == EN_SEC_SOLO || ar_sec == EN_SEC_BRIDGE)
+        ar_cue = 1;
+    en_swell = 0;
+    en_section = ar_sec;
+    ar_push = 0.0f;
+}
+
 static void bar_start(void)
 {
     int pb = (int)(bar & 7u), db = en_drift_bars(par[P_DRIFT]);
@@ -4292,6 +4471,38 @@ static void drain(void)
             break;
         case C_THEME:
             theme_pc = (int8_t)a;
+            break;
+        case C_SECTION:
+            ar_goto(a);
+            break;
+        case C_DOWNBEAT:                         /* the bar from its top, now: the grid to the nearest bar line (the
+                                                  * one just gone counted once more, or the one coming early), both
+                                                  * sequences from their first step. Not under a MIDI clock: its grid
+                                                  * is the clock's */
+            if (en_playing && !en_ext) {
+                sixteenth = (sixteenth + 8u) & ~15u;
+                pulse = 0;
+                pulse_left = 0.0f;
+                tick_wait = 0;
+                sq_pos[0] = sq_pos[1] = 0;
+            }
+            break;
+        case C_CHORDDEG:                         /* the chord to degree a of the scale, now, as the walk's own (its
+                                                  * voicing); Endless: written in slot 1, the walk on from it; Loop:
+                                                  * heard till the loop's next chord. Drift's bars from here */
+            if (nsteps) {
+                const int d = a % nsteps;
+                if (!PLAY_LOOP) {
+                    slot_walk_set(0, d);
+                    prog_publish();
+                }
+                chord_slot = -1;
+                deg = d;
+                shape = walk_shape;
+                voice_chord();
+                chord_bars = 0;
+                change_pending = 0;
+            }
             break;
         case C_SEQ:
             seq_have = (uint8_t)a;

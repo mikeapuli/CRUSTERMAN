@@ -1303,7 +1303,7 @@ static void test_lead_off(void)
     static const int DG[4] = {0, 2, 4, 2}, DU[4] = {4, 4, 4, 8};
     char t[16];
     uint32_t keys;
-    CHECK(en_param_info(P_LDIN)->hi == EN_LDIN_OFF, "test_lead_off: Lead in's top %d", en_param_info(P_LDIN)->hi);
+    CHECK(en_param_info(P_LDIN)->hi == EN_LDIN_WAIT, "test_lead_off: Lead in's top %d", en_param_info(P_LDIN)->hi);
     en_param_text(P_LDIN, EN_LDIN_OFF, t);
     CHECK(!strcmp(t, "Off"), "test_lead_off: shown %s", t);
     en_param_text(P_LDIN, 64, t);

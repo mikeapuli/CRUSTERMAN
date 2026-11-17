@@ -1,0 +1,35 @@
+# (CRUSTERMAN) Lead in at Wait (Undertow's): the Lead (MIDI channel 3) plays nothing of its own; a figure on the white
+# keys, and it answers and goes on from it; when the figure's kinship is over (Memory 50 at 60: 22 bars, 88 s), silent
+# again
+wait 500
+turn PRESET 1
+wait 500
+expect piece 1
+expect par101 66
+peakreset
+wait 90000
+expect notes_ch3 0
+# four notes, a beat each, then quiet
+key w0 down
+wait 900
+key w0 up
+wait 100
+key w2 down
+wait 900
+key w2 up
+wait 100
+key w4 down
+wait 900
+key w4 up
+wait 100
+key w2 down
+wait 1800
+key w2 up
+peakreset
+wait 40000
+expect notes_ch3 >3
+# its time over: nothing more
+wait 120000
+peakreset
+wait 90000
+expect notes_ch3 0

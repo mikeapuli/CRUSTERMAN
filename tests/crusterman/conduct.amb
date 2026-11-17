@@ -1,0 +1,35 @@
+# (CRUSTERMAN) EDIT held, a white key: the chord to that degree of the scale, now. Leeward is D Aeolian: the fifth
+# white key (w4) is the fifth degree, A (9); the first (w0) home, D (2). EDIT let go after it: no "next chord", and
+# held on with a key pressed, no new progression
+wait 1000
+expect chordroot 2
+press EDIT
+wait 100
+key w4 down
+wait 100
+key w4 up
+wait 100
+release EDIT
+wait 300
+expect chordroot 9
+expect view 0
+wait 4000
+expect chordroot 9
+press EDIT
+wait 100
+tapkey w3
+wait 2000
+release EDIT
+wait 300
+expect chordroot 7
+press EDIT
+wait 100
+tapkey w0
+wait 100
+release EDIT
+wait 300
+expect chordroot 2
+# without EDIT the white keys are the Lead's, as ever: the chord stays
+tapkey w4
+wait 500
+expect chordroot 2

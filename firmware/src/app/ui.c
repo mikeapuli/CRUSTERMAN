@@ -27,7 +27,7 @@ enum { V_DUB, V_CHORD, V_TEXTURE, V_BASS, V_DRUMS, V_SPACE, V_SETUP, NPAGES, V_M
        V_DSND, V_CFM, V_PFM, V_BFM, V_CHORDS, V_PAT, V_PERF, V_KEY, V_NSND, V_ESND, V_NSND2, V_ARC, V_SMOVE, V_S2MOVE, V_AMOVE, NVIEWS };
 /* (V_PERF: PERFORM's knobs, the master actions; V_MIX while white 6 is held. V_KEY: HOME again, the key and the
  * tempo, the Dub page's second) */
-static const char *const VIEW_NAME[NVIEWS] = {"Nachtfahrt", "Drone", "Sequence", "Lead", "Sequence 2", "Space", "Setup",
+static const char *const VIEW_NAME[NVIEWS] = {"Crusterman", "Drone", "Sequence", "Lead", "Sequence 2", "Space", "Setup",
                                               "Mix", "Drone sound", "Seq sound", "Lead sound", "Seq2 sound",
                                               "Drone move", "Repeats", "Lead move", "Chords", "Pattern", "Perform", "Key",
                                               "Atmosphere", "Echo", "Atmos sound", "Arc", "Seq move", "Seq2 move",
@@ -778,6 +778,11 @@ static int perf_sounds(int i)                    /* layer i (0..4) heard: not mu
 static void set_view(int v);
 #define PERF_SHIFT 9u                            /* white 6 (D4), held: the knobs the mix */
 #define PERF_FORGET 26u                          /* white 16 (G5), the top key: the Lead's memory erased */
+/* (CRUSTERMAN) PERFORM's black 6-9 (F#4 G#4 A#4 C#5): Emerge, Flow, Solo, Bridge, a press, the arc there now (lit;
+ * the section playing blinks); black 10 (D#5): DOWNBEAT, a press, the bar from its top now (to put this unit's bar
+ * on another's by ear, with no clock between them) */
+static const uint8_t PERF_SEC[4] = {13, 15, 17, 20};
+#define PERF_DOWNBEAT 22u
 static void lock_toggle(void)                    /* SEL held: Lock, on or off: the phrases keep their kick, groove and plan,
                                                   * Evolve's own moves rest (not saved; off at boot) */
 {
@@ -800,6 +805,24 @@ static void perf_key(uint32_t key, int down)
             en_lead_forget();
             say("LEAD", "FORGOTTEN");
             card_show("LEAD FORGOTTEN", "new ideas", K_BASS, 0);
+        }
+        return;
+    }
+    for (i = 0; i < 4; i++)                      /* (CRUSTERMAN) black 6-9: the arc to a section, now */
+        if (key == PERF_SEC[i]) {
+            if (down) {
+                static const char *const SEC[4] = {"EMERGE", "FLOW", "SOLO", "BRIDGE"};
+                en_goto_section(i);
+                say("SECTION", SEC[i]);
+                card_show("SECTION", SEC[i], K_FROST, 0);
+            }
+            return;
+        }
+    if (key == PERF_DOWNBEAT) {                  /* (CRUSTERMAN) black 10: the bar from its top, now */
+        if (down) {
+            en_downbeat();
+            say("DOWNBEAT", 0);
+            card_show("DOWNBEAT", en_ext ? "the clock's" : "the bar from its top", K_PULSE, 0);
         }
         return;
     }
@@ -945,9 +968,28 @@ static void slot_key(uint32_t key)               /* the Chords page: a key, the 
     say(slot_label(ui.slot, nm), 0);
 }
 static uint8_t edit_new;                         /* EDIT held on: the new progression made this hold */
+static uint8_t edit_key;                         /* (CRUSTERMAN) EDIT held and a white key pressed: the chord conducted
+                                                  * this hold (its release then does nothing, nor its holding on) */
+/* (CRUSTERMAN) EDIT held, a white key: the chord to that degree of the scale, now (the first white key home, as the
+ * Lead's keys count; past the scale's top, round again). For following another instrument by ear: it moves, a key
+ * puts this one on the same chord. Drift's bars count from here; Drift at Hold, the chord stays till the next key */
+static void conduct(int st)
+{
+    static const char *const DEG[7] = {"HOME", "SECOND", "THIRD", "FOURTH", "FIFTH", "SIXTH", "SEVENTH"};
+    int n = 0, i;
+    for (i = 0; i < 12; i++)
+        n += (int)(proj.pool >> i & 1u);
+    st %= n ? n : 1;
+    edit_key = 1;
+    en_chord_deg(st);
+    say("CHORD", DEG[st % 7]);
+    card_show("CHORD", DEG[st % 7], K_PULSE, 0);
+}
 static void edit_released(uint32_t held)
 {
-    if (edit_new) {                              /* (held on: done already) */
+    if (edit_key) {                              /* (conducted: done already) */
+        edit_key = edit_new = 0;
+    } else if (edit_new) {                       /* (held on: done already) */
         edit_new = 0;
     } else if (held >= NEXT_HOLD) {              /* held: the next chord */
         en_next();
@@ -1438,7 +1480,7 @@ static void input(void)
             card_show("SHAKE ALL", "every layer, and the space", K_FROST, 1);
         }
     }
-    if ((btn >> B_EDIT & 1u) && !edit_new && plat_ms() - ui.down_t[B_EDIT] >= SHAKE_HOLD &&
+    if ((btn >> B_EDIT & 1u) && !edit_new && !edit_key && plat_ms() - ui.down_t[B_EDIT] >= SHAKE_HOLD &&
         (int32_t)(ui.turn_t - ui.down_t[B_EDIT]) <= 0) {   /* EDIT held on: a new progression, the walk's chords
                                                   * all walked again (yours, the gaps and the one playing kept) */
         edit_new = 1;
@@ -1467,6 +1509,14 @@ static void input(void)
                     continue;                    /* REC held: the effects (and their keys let go) */
             if (btn >> B_REC & 1u)
                 continue;                        /* (REC held: the other keys do nothing) */
+            if (btn >> B_EDIT & 1u) {            /* (CRUSTERMAN) EDIT held: the white keys conduct the chord */
+                int st;
+                for (st = 0; st < 16 && STEP_KEY[st] != i; st++)
+                    ;
+                if (st < 16 && down)
+                    conduct(st);
+                continue;
+            }
             if (ui.view == V_PAT && !ui.perf) {  /* the Pattern page: the white keys, the lane's steps */
                 if (down)
                     pattern_key(i, keys);
@@ -2305,7 +2355,7 @@ static void draw_card(uint32_t now)
     text_c(CX, y + 28, &FONT_XS, ui.card_text, tc);
 }
 
-#define BERLIN_BY "CRANKY MAN"                   /* (the user's name, on the main screen and the launch screen) */
+#define BERLIN_BY "CRUSTERMAN"                   /* (the user's name, on the main screen and the launch screen) */
 static void draw_main(void)
 {
     uint32_t now = plat_ms(), h = hash(2166136261u, (uint32_t)en_frozen << 16 | proj.piece << 24 | (uint32_t)en_playing << 17), i;
@@ -2676,6 +2726,11 @@ static void leds(void)
         }
         if (!(ui.keys >> PERF_FORGET & 1u))      /* FORGET: lit steadily (white 6 and the solos blink), dark while held */
             k |= 1u << PERF_FORGET;
+        for (i = 0; i < 4; i++)                  /* (CRUSTERMAN) the sections: lit, the one playing blinking */
+            if (en_section != i || blink)
+                k |= 1u << PERF_SEC[i];
+        if (!(ui.keys >> PERF_DOWNBEAT & 1u))
+            k |= 1u << PERF_DOWNBEAT;
 
     } else if (proj.leds) {                      /* (BERLIN) the white key of the note the Lead sounds */
         const int d = en_lead_deg;
@@ -3227,9 +3282,9 @@ static void splash_band(int f, int32_t oy)
     for (k = 0; k < 14; k++)
         cv_rect(SX[k], SY[k] - oy, 1, 1, mix(K_BG, K_DIM, 3 + (k & 3)));
     if (f >= 1)
-        text_c(120, 92 - oy, &FONT_L, "NACHTFAHRT", mix(K_BG, K_TEXT, f >= 8 ? 16 : 2 * f));
+        text_c(120, 92 - oy, &FONT_L, "CRUSTERMAN", mix(K_BG, K_TEXT, f >= 8 ? 16 : 2 * f));
     if (f >= 8)
-        text_c(120, 132 - oy, &FONT_S, "by " BERLIN_BY, mix(K_BG, K_BELL, f >= 16 ? 16 : 2 * (f - 7)));
+        text_c(120, 132 - oy, &FONT_S, "after NACHTFAHRT", mix(K_BG, K_BELL, f >= 16 ? 16 : 2 * (f - 7)));
     if (f >= 16)
         text_c(120, 224 - oy, &FONT_XS, EN_VERSION, K_DIM);
     cv_blit(0, (uint32_t)oy);

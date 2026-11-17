@@ -35,6 +35,13 @@
 #define EN_LDIN_OFF 65                 /* Lead in's top: Off, the Lead plays only what the keys and MIDI in play (no
                                         * phrases of its own, no answers, no theme taken: fm1-nachtfahrt #3) */
 
+#define EN_LDIN_WAIT 66                /* (CRUSTERMAN) above Off: Wait, the Lead silent till the keys or MIDI in play
+                                        * a figure, then its answer and what grows from it, then silent again */
+#ifdef EN_REF_PIECES                   /* (host tests: NACHTFAHRT's recipes, amb.c) */
+#define EN_THEME_PIECE 9               /* the piece with a written theme: Umeda */
+#else
+#define EN_THEME_PIECE (-2)            /* none of CRUSTERMAN's */
+#endif
 /* modes: pools relative to the root (bit i: root + i semitones) */
 enum { MODE_IONIAN, MODE_DORIAN, MODE_PHRYGIAN, MODE_LYDIAN, MODE_MIXOLYDIAN, MODE_AEOLIAN, MODE_PENT_MAJ,
        MODE_PENT_MIN, EN_NMODES };
@@ -129,6 +136,9 @@ void en_pool(uint32_t pool);                   /* the scale, relative to the roo
 void en_play(int on);                          /* it plays / rests (the tails ring on) */
 void en_next(void);                            /* the next chord: on the next bar (now while resting) */
 void en_freeze(int on);
+void en_goto_section(int sec);                      /* (CRUSTERMAN) the arc to a section now (EN_SEC_*) */
+void en_downbeat(void);                        /* (CRUSTERMAN) the bar from its top now (playing, no MIDI clock) */
+void en_chord_deg(int d);                      /* (CRUSTERMAN) the chord to scale degree d (0: home) now */
 void en_seed(uint32_t s);                      /* stir some entropy into the generators */
 void en_panic(void);                           /* everything quiet, now */
 void en_regrow(void);                          /* a new piece: fresh loops and patterns, the home chord */

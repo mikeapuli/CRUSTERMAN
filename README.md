@@ -1,141 +1,79 @@
-# NACHTFAHRT for the M-VAVE FM-1
+# CRUSTERMAN for the M-VAVE FM-1
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q5MOB4M)
+CRUSTERMAN is a fork of [NACHTFAHRT](https://github.com/FartyPants/fm1-nachtfahrt) by Cranky Man, the generative
+Berlin School firmware for the M-VAVE FM-1. It is made to be played **next to** NACHTFAHRT: one FM-1 runs
+NACHTFAHRT, a second runs CRUSTERMAN, and piece N here is written as the other half of piece N there.
 
-![NACHTFAHRT](docs/img/site/banner.jpg)
+It changes two things and leaves the rest of NACHTFAHRT as it is (engine, voices, effects, pages):
 
-**[Install](https://fartypants.github.io/fm1-nachtfahrt/install/)** (Chrome or Edge, also Chrome on Android or Chromebook; the FM-1
-on USB) · **[Try it in the browser](https://fartypants.github.io/fm1-nachtfahrt/emu/)** ·
-**[Manual](https://fartypants.github.io/fm1-nachtfahrt/manual/)** ·
-**[Website](https://fartypants.github.io/fm1-nachtfahrt/)**
+1. **Ten different pieces**, each a companion to NACHTFAHRT's piece in the same slot.
+2. **Four ways to play the form by hand** that NACHTFAHRT doesn't have.
 
-## What the fahrt?
-NACHTFAHRT turns the M-VAVE FM-1 into a generative Berlin School machine, after the 1970s music of
-Tangerine Dream, Klaus Schulze and Ashra: long, hypnotic pieces, repeating synthesizer sequences,
-slowly evolving hypnotic textures, a strong sense of space. It plays itself from the moment it's switched on, but you
-can play with it: the white keys give you the melody, always in the piece's key.
-It was called BERLIN while it was being built; but NACHTFAHRT (however you want to pronounce it) is just the right name.
-
-## VIDEO (click to play)
-
-[![NACHTFAHRT on the FM-1 — watch on YouTube](docs/img/site/video.jpg)](https://youtu.be/OLXYHRydniw)
-
-## Why?
-Cranky Man loves this "Berlin School" thing, with all its repetition and echoing, evolving plucks and drones and whatnots, because it puts him to sleep, and if there is one thing that a Cranky Man needs, it is sleep. Lots of it. Usually around 15 hours per week. And now it can put you to sleep, too!
-
-<img width="1102" height="709" alt="image" src="https://github.com/user-attachments/assets/f64bdf21-ec1d-4225-835f-0af762f5a676" />
-
-The whole idea behind this music generator is that IF you are NOT put to sleep by the lead sound (which invents its own melody), then when you start playing, it will listen, and then respond to your musical "call" with its own version of the musical phrase.
-
-## What it does?
-- a **Sequence** of up to 16 steps on a plucked analog-style voice (2600, Moog, Synthi, Pulse, Glass), a
-  plucked string (Pluck) or one of ten FM voices (fm1_open's recipes: FM Keys, FMMarimba, FM Vibes and more),
-  its filter wandering slowly, its notes **repeated** at the echo's times (a dotted eighth by default, the
-  classic Berlin School echo), so sparse notes fill in the spaces;
-- **Sequence 2**, often a step shorter, so the two drift apart and meet again, and with Motion an octave up or
-  down now and then, for a section;
-- a **Drone**: a chord on two banks of voices (Organ, Strings, Horn, Saws, Glass, or a Choir whose vowel moves
-  with the Drone's filter) with a pedal under it, a
-  phaser and a slow walk from chord to chord;
-- a **Lead**: one gliding voice (Odyssey, Mini, Flute, Theremin, Synthi, three FM voices, or a Choir) playing dreamy calls and answers deep in
-  the reverb and the echo; it remembers its motifs and returns to the piece's theme (how much it keeps: **Memory**).
-  You can also play it on the white keys, in the scale: three notes or more and a pause become its theme, and its
-  next ideas grow out of yours, straying further until they are its own again;
-- an **Atmosphere**: Wind, Surf, Space, Air, Tape, Drops, Hail, Stereo Rain (a recording of rain) or Water (a recording of the water at Umeda) (or none);
-- an **arc**: a piece opens from the drone (each layer's filter rising from closed), flows, lets the Lead take
-  over and crosses a bridge in the middle, where the layers' filters part and come together. It never ends by
-  itself: it repeats for ever;
-- **filter motion**: every layer's filter moves on its own clock, always relative to where you've set its
-  Cutoff, so the layers diverge and converge, and you can turn the knob at any moment. The screen shows it.
-
-Listen, and play: let it run for hours, or join in. Play the melody on the white keys over the sequences and the
-drone, sweep the filters on the black keys, pick a piece, change its key and tempo, thin or fill the sequences,
-push the echo, mute and solo the layers.
-
-NACHTFAHRT is a fork of [DUB-1](https://github.com/sbegueria/fm1-dub), itself a fork of
-[AMB-1](https://github.com/charlesvestal/fm1-amb), Charles Vestal's generative ambient firmware for the FM-1. It
-keeps their platform, panel, echo, plate and much of the engine.
-
-**Status: version 1.0** (see [the releases](https://github.com/FartyPants/fm1-nachtfahrt/releases)). It
-runs on the FM-1, installed from the [web installer](https://fartypants.github.io/fm1-nachtfahrt/install/), and in the
-[browser emulator](https://fartypants.github.io/fm1-nachtfahrt/emu/), from the same code.
+NACHTFAHRT's own README is kept in [docs/NACHTFAHRT-README.md](docs/NACHTFAHRT-README.md) and its manual in
+[docs/MANUAL.md](docs/MANUAL.md); everything there still applies unless this page says otherwise.
 
 ## The pieces
 
-| # | Piece | After | Key, tempo | |
+Same root as the NACHTFAHRT piece, the same scale or a subset of it, so the two units stay in key while each walks
+its own chords. Opposite role, register and voice. All between 60 and 74 BPM, with slow attacks and sparse notes, so
+they sit against a second unit with no clock between the two.
+
+| # | Piece | For | Key, tempo | |
 |---|---|---|---|---|
-| 1 | Timewind | Schulze, *Bayreuth Return* | D minor, 96 | Two sequences of 16 and 15, an organ through the phaser, a long opening (the Sequence's filter takes 32 bars to open), a wider reverb |
-| 2 | Wahnfried | Schulze, *Wahnfried 1883* | B♭ Dorian, 80 | Strings drifting, the roots walking with no home, a faint heartbeat of sequences under them, a theremin lead; the Drone's filter is the main movement |
-| 3 | Phaedra | Tangerine Dream, *Phaedra* | D minor, 149 | A Moog bass line of 16 over a second line of 15, a choir, flutes, much filter movement; the Sequence opens over 16 bars, Sequence 2 is straight in |
-| 4 | Rubycon | Tangerine Dream, *Rubycon* | F minor, 144 | Dark organ, two sequences of 8 (the 2600, two octaves down) and 7 rising out of the drone, the Synthi lead: the Sequence opens over 16 bars, Sequence 2 after it, over 32 |
-| 5 | Stratosfear | Tangerine Dream, *Stratosfear* | E minor, 138 | Brighter and driving, two sequences interlocking, straight in, the Lead forward |
-| 6 | Sunrain | Ashra, *New Age of Earth* | D major, 130 | The most hopeful: sequences of 8 and 7, both echo repeats at full, bright strings, surf; straight in |
-| 7 | Mirage | Schulze, *Mirage* | F♯ minor, 95 | Icy glass sequences of 12 and 11 opening slowly (16 and 24 bars), a deep phaser, a long reverb, sparse |
-| 8 | Cyborg | Schulze, *Cyborg* | C Phrygian, 70 | Early and raw: deep organ drones beating, a quiet sequence (level 20), no Sequence 2; the theremin Lead up front (level 70); the Drone's filter moves widely |
-| 9 | Sakura Rain | After the spring in Osaka. Added in v. 0.9.8 | B♭ Dorian, 80 | Long evolving ambient piece. Leave it play to discover the hidden melody. Calm arpeggios from the 2600 and Sub, strings that wander through the Dorian scale and Japanese favorite Royal Road progression. A low pitched theremin glides above it all, singing like a human voice. Made by Cranky Man as a reminder of the numerous springs he spent in Osaka. The rain and wind cause delicate pink petals to fall rapidly from trees, turning streets into a pink carpet. The blossoms peak and fall within a week or two. This brevity reminds Cranky Man to appreciate the present moment, finding a bittersweet beauty in the knowledge that nothing lasts forever |
-| 10 | Umeda | Nod to the environmental sound of the plaza of Umeda. Added in v. 1.0 | F♯ major pentatonic, 50, Yo C# scale lead piano. | Kankyō Ongaku, after the soundscape of the plaza of Umeda: a grand piano plays a slow motive and wanders from it within the scale, over a quiet organ; the arpeggios are piano too, and swell and thin slowly. Made by Cranky Man as a nod to architect Mr. Tadao Ando and inspired by the sound one can constantly hear when walking under Grant Front, at “Umekita Square,” adjacent to the North Exit of JR Osaka Station. Cranky Man walked that road hundreds of times on his way to the City Bakery for his morning coffee, at super-early hours around 11 a.m.-ish (kind of his morning record). If you want the real Cranky Man Umeda experience, press Save and select with Algorithm knob "Water" which is an exact recreation of the white noise the cascading water at the plaza makes, heard when you are sitting down in the Umekita cellar. Derived from his own audio recordings.|
+| 1 | Leeward | Timewind | D minor, 72 | Strings, glass lines of 13 and 11 an octave up, a flute. No wind |
+| 2 | Undertow | Wahnfried | B♭ Dorian, 60 | The pulse under the strings: plucked lines of 8 and 5, low; the Lead waits |
+| 3 | Slack Water | Phaedra | D minor, 74 | A horn drone whose filter is the movement, a few high bells, a low theremin, surf |
+| 4 | Phosphor | Rubycon | F minor, 72 | Vibes of 5 and glass of 9 an octave up, a thin glass drone, a high flute |
+| 5 | Bedrock | Stratosfear | E minor, 69 | A Moog line of 6 two octaves down, dark saws; the Lead waits |
+| 6 | Salt Pan | Sunrain | D major pentatonic, 65 | Marimbas of 7 and 5 with hardly an echo, a quiet organ, a reed |
+| 7 | Ember | Mirage | F♯ minor pentatonic, 63 | A low dark organ, an electric piano an octave down, a low Mini, tape |
+| 8 | Carapace | Cyborg | C Phrygian, 70 | A low pulse of 5 and a pluck of 7, a long echo; the Lead (a choir) waits |
+| 9 | Petrichor | Sakura Rain | B♭ Dorian, 60 | Sakura Rain's eight chords, looping, on glass; a flute that waits; drops |
+| 10 | Tide Pool | Umeda | F♯ major pentatonic, 60 | Water, a slow string pad, a few glass notes; a soft theremin that waits |
 
-NACHTFAHRT is not connected with any of these artists, architects, or anybody like that. Don't get your hopes up. 
+The recipes are in `firmware/src/dsp/amb.c` (`PC_LEEWARD` and on). They were set by measurement in the simulator, not
+by ear on two units: expect to tune levels and tempos on the hardware.
 
-## In short
+## What it adds
 
-| | |
-|---|---|
-| White keys | Play the Lead, in the piece's scale (the key it sounds is lit) |
-| Black keys | Eleven effects, each while held (lit; dark while held): Take-off, Supernova, Twitter, Repeat, Shimmer, Freeze, Octave, Return, then Rise, Close, Transpose (in PERFORM: the solos) |
-| PLAY · REC · EDIT | Play / rest · a tap: hold (the echo repeats what it holds), held: the effects grid (16 effects on the white keys) · a tap: the Chords page, held: the next chord |
-| SEL | PERFORM: the knobs Filter, Wet, Energy, Sweep; white 1–5 mute the Drone, Sequence, Lead, Sequence 2, Atmosphere; black 1–5 solo them; white 6 held: the levels; white 7–11 held: Sweep, Open, Shut, Drop (both sequences out), Echo; the top key (G): the Lead forgets its ideas and its theme. Held: Lock |
-| HOME | The Nachtfahrt page (Filter, Evolve, Motion, Drift); again, the Key page (Tempo, Root, Mode, Transpose) |
-| ENV | The Drone (Pedal, Reso, Phaser, Attack); again, its sound (Colour, Release, Reverb, Echo); again, its Move page (Width, Time, Rate, Intro) |
-| ARP | The Sequence (Density, Octave, Length, Grid); again, its sound (Cutoff, Decay, Reverb, Echo); again, its Repeats (Repeat A, A time, Repeat B, B time); again, its Move page |
-| LFO | The Lead (Phrases, Octave, Glide, Vibrato); again, its sound (Tone, Attack, Reverb, Echo); again, its Move page |
-| SEQ | Sequence 2 (Chance, Octave, Length, Level); again, its sound; again, the Pattern page (write the steps on the keys); again, its Move page |
-| SAVE | The Atmosphere (Density, Width, Drift, Air); again, its sound (Colour, Ring, Reverb, Echo); again, its Move page |
-| FX | Space (Echo, Echo time, Feedback, Reverb); again, the Echo page (Blur, Tone, Width, Size) |
-| GLO | Setup (Tune, MIDI out, Lights, Save); again, the Arc (Lead in, Bridge, Arc, Memory). Held: save; held on: the piece back to its recipe |
-| ALGORITHM | On a layer's page, its voice (the Atmosphere: its character) |
-| PRESETS | The piece |
-| SELECT | On a layer's pages, its level; on the Nachtfahrt page, Energy (elsewhere nothing) |
-| OCT− / OCT+ | On the Sequence's, the Lead's and Sequence 2's pages, its octave (lit while it's above or below where the piece was loaded) |
+| | How | What it does |
+|---|---|---|
+| **Wait** | The Arc page (GLO twice), KNOB 1, Lead in: one step past Off | The Lead plays nothing of its own. Play three notes or more on the white keys and pause: it answers, and goes on growing ideas out of your figure for 45 to 150 seconds (the Memory knob), then is silent till you play again. Pieces 2, 5, 8, 9 and 10 start this way |
+| **Conduct** | Hold EDIT, press a white key | The chord goes to that step of the scale at once (the first white key is home). For following the other unit by ear: it changes chord, one key puts this unit on the same one. With Drift at Hold the chord stays until your next key. Press the key within about a second of holding EDIT: EDIT held alone for 1.5 s still makes new chords, as in NACHTFAHRT |
+| **Section** | PERFORM (tap SEL), black keys 6 to 9 | Emerge, Flow, Solo, Bridge: the arc goes there now. The four are lit; the section playing blinks. Emerge restarts the arc (the intros close and open again) |
+| **Downbeat** | PERFORM (tap SEL), black key 10 | The bar starts from its top now, both sequences from their first step. Tap it on the other unit's downbeat to put the two in phase without a clock. Does nothing under an external MIDI clock |
 
-The [manual](docs/MANUAL.md) has the rest.
+Saves from NACHTFAHRT are not read (the pieces are different): CRUSTERMAN starts from its own recipes.
 
-## Building and testing
+## Build and install
 
-The toolchain is the same as DUB-1's (see [BUILDING.md](BUILDING.md) and [EMULATOR.md](EMULATOR.md)):
+The repository builds itself on GitHub: **Actions → build → Run workflow**. The firmware package is attached to the
+finished run as the artifact `crusterman-firmware` (a zip with `amb.fwsc` in it).
+
+Install it from a computer with the FM-1 on USB (needs Python 3 and `pip3 install mido python-rtmidi`):
 
 ```
-tests/run_tests.sh      # the engine, the platform pieces, the app in a simulator, the web builds
-web/emu/build.sh        # the browser emulator: build/emu (serve it, open index.html)
-./build.sh              # build/amb.fwsc, for the FM-1
-python3 tools/fm1_install.py build/amb.fwsc     # install it over USB
+python3 tools/fm1_install.py amb.fwsc
 ```
 
-`build/host/amb_host SCRIPT OUTDIR` runs the whole app on a computer from a script
-(`tests/scenarios/*.amb`), with audio and screenshots coming out; `build/host/en_render OUT.wav SECS piece=N`
-renders the engine alone.
+Installing firmware is at your own risk. Going back to stock firmware and recovery are described in
+[BUILDING.md](BUILDING.md). To build locally instead, see the same file.
 
-## Credits
+Tests: `sh tests/run_tests.sh`. The engine's own tests run against NACHTFAHRT's recipes (kept for the tests only, built
+with `-DEN_REF_PIECES`), which shows the engine's sound is unchanged; `tests/crusterman/` covers the pieces and the
+four additions.
 
-NACHTFAHRT is a fork of [DUB-1](https://github.com/sbegueria/fm1-dub), a fork of
-[AMB-1](https://github.com/charlesvestal/fm1-amb) by Charles Vestal (GPL-3.0-only): the echo chain, the plate,
-the pieces system, the chord walk, the UI and the platform come from there. The reverb is Jon Dattorro's plate
-("Effect Design, Part 1", JAES 1997), as in [FoMni-1](https://github.com/charlesvestal/fm1-fomni); Shimmer's
-octave shifter follows OCT UP and its SHIMMER in [Felucca](https://github.com/hugelton/Felucca)'s performance layer
-(Leo Kuroshita, Hügelton Instruments; also in [Skiff](https://github.com/illuminus5/skiff)); the Drone's Choir
-follows VOICE in Felucca (`eng_formant.c`, GPL-3.0; Klatt's cascade; its vowel table, after Hillenbrand et al.); the granular
-cloud (Freeze) follows the design of CLOUD in [JIANT](https://github.com/juanjiant-bit/JIANT) (GPL-3.0); Pluck's
-string follows `pluck.c` in M-VAVE's [fm1_open](https://github.com/m-vave/fm1_open) (after DaisySP's String,
-Electrosmith and Emilie Gillet; MIT); the FM voices play the demo recipes of `app/presets.c` in fm1_open (M-VAVE;
-GPL-3.0), their envelopes after MSFA (Google's DX7 model; Apache-2.0); Wind's pink and Surf's brown noise and Drops' drops follow NOISE in
-[Skiff](https://github.com/illuminus5/skiff) (`eng_noise.c`, Leo Kuroshita, Hügelton Instruments; GPL-3.0; Paul Kellet's
-pink filter); the Tape
-atmosphere is DUB-1's crackle, after Bahadirhan Kocer's "Using Resonators in Live". The way the sequence is
-played (a root accented, sparse notes, a dotted-eighth repeat as loud as the note, two delays) owes much to
-Synth Seeker's videos on Berlin School sequencing. (The Bob Ross of Berlin School) The platform (hardware layer, USB, update loader, storage,
-installer) is [Felucca](https://github.com/hugelton/Felucca)'s by Leo Kuroshita (Hügelton Instruments), by way
-of [X0X](https://github.com/charlesvestal/fm1-x0x), FoMni-1, AMB-1 and DUB-1. The idea of running FM-1 firmware
-in the browser comes from [Groove OS](https://www.groove-os.com/). GPL-3.0-only; see [LICENSING.md](LICENSING.md).
-The concept, compositions and snoring you hear in your head is Cranky Man himself.
+## Changes from NACHTFAHRT (2026-11-17)
 
-M-VAVE and FM-1 are trademarks of their owners. NACHTFAHRT is not affiliated with M-VAVE or Hügelton Instruments.
+- `firmware/src/dsp/amb.c`, `amb.h`: the ten recipes replaced; Lead in's Wait; `en_goto_section`, `en_downbeat`,
+  `en_chord_deg`; no piece has a written theme.
+- `firmware/src/app/ui.c`: EDIT held with a white key; PERFORM's black keys 6 to 10; the name on the screens.
+- `firmware/src/app/app.h`: the saved project's magic.
+- `tests/`, `host/build_host.sh`, `.github/workflows/build.yml`, this README.
+
+## Credits and licence
+
+GPL-3.0-only, as NACHTFAHRT. NACHTFAHRT is by Cranky Man; it is a fork of
+[DUB-1](https://github.com/sbegueria/fm1-dub), itself a fork of [AMB-1](https://github.com/charlesvestal/fm1-amb) by
+Charles Vestal, on the Felucca platform by Leo Kuroshita. See [LICENSING.md](LICENSING.md) for every component.
+CRUSTERMAN is not connected with any of them, nor with the artists NACHTFAHRT's pieces are named after.

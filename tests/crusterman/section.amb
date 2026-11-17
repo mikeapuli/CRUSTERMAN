@@ -1,0 +1,25 @@
+# (CRUSTERMAN) PERFORM's black 6-9 (keys 13 15 17 20): the arc to Emerge, Flow, Solo, Bridge, now; the section
+# playing as the engine has it (0 Emerge, 1 Flow, 2 Solo, 3 Bridge)
+wait 500
+expect section 0
+tap SEL
+wait 300
+expect litkey13 1
+expect litkey20 1
+expect litkey22 1
+tapkey 20
+wait 300
+expect section 3
+tapkey 17
+wait 300
+expect section 2
+tapkey 15
+wait 300
+expect section 1
+# Emerge: the arc from its start (Leeward has intros: Emerge again)
+tapkey 13
+wait 300
+expect section 0
+# left by itself it goes on: Emerge's intros over (16 bars at 72: 54 s), Flow
+wait 60000
+expect section 1
