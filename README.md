@@ -14,31 +14,33 @@ NACHTFAHRT's own README is kept in [docs/NACHTFAHRT-README.md](docs/NACHTFAHRT-R
 
 ## The pieces
 
+Each is named after the NACHTFAHRT piece it goes with, with a K in front: KTimewind goes with Timewind, and so on.
+
 Same root as the NACHTFAHRT piece, the same scale or a subset of it, so the two units stay in key while each walks
 its own chords. Opposite role, register and voice. All between 60 and 74 BPM, with slow attacks and sparse notes, so
 they sit against a second unit with no clock between the two.
 
-| # | Piece | For | Key, tempo | |
-|---|---|---|---|---|
-| 1 | Leeward | Timewind | D minor, 72 | Strings, glass lines of 13 and 11 an octave up, a flute. No wind |
-| 2 | Undertow | Wahnfried | B♭ Dorian, 60 | The pulse under the strings: plucked lines of 8 and 5, low; the Lead waits |
-| 3 | Slack Water | Phaedra | D minor, 74 | A horn drone whose filter is the movement, a few high bells, a low theremin, surf |
-| 4 | Phosphor | Rubycon | F minor, 72 | Vibes of 5 and glass of 9 an octave up, a thin glass drone, a high flute |
-| 5 | Bedrock | Stratosfear | E minor, 69 | A Moog line of 6 two octaves down, dark saws; the Lead waits |
-| 6 | Salt Pan | Sunrain | D major pentatonic, 65 | Marimbas of 7 and 5 with hardly an echo, a quiet organ, a reed |
-| 7 | Ember | Mirage | F♯ minor pentatonic, 63 | A low dark organ, an electric piano an octave down, a low Mini, tape |
-| 8 | Carapace | Cyborg | C Phrygian, 70 | A low pulse of 5 and a pluck of 7, a long echo; the Lead (a choir) waits |
-| 9 | Petrichor | Sakura Rain | B♭ Dorian, 60 | Sakura Rain's eight chords, looping, on glass; a flute that waits; drops |
-| 10 | Tide Pool | Umeda | F♯ major pentatonic, 60 | Water, a slow string pad, a few glass notes; a soft theremin that waits |
+| # | Piece | Key, tempo | |
+|---|---|---|---|
+| 1 | KTimewind | D minor, 72 | Strings, glass lines of 13 and 11 an octave up, a flute. No wind |
+| 2 | KWahnfried | B♭ Dorian, 60 | The pulse under the strings: plucked lines of 8 and 5, low; the Lead waits |
+| 3 | KPhaedra | D minor, 74 | A horn drone whose filter is the movement, a few high bells, a low theremin, surf |
+| 4 | KRubycon | F minor, 72 | Vibes of 5 and glass of 9 an octave up, a thin glass drone, a high flute |
+| 5 | KStratosfear | E minor, 69 | A Moog line of 6 two octaves down, dark saws; the Lead waits |
+| 6 | KSunrain | D major pentatonic, 65 | Marimbas of 7 and 5 with hardly an echo, a quiet organ, a reed |
+| 7 | KMirage | F♯ minor pentatonic, 63 | A low dark organ, an electric piano an octave down, a low Mini, tape |
+| 8 | KCyborg | C Phrygian, 70 | A low pulse of 5 and a pluck of 7, a long echo; the Lead (a choir) waits |
+| 9 | KSakura Rain | B♭ Dorian, 60 | Sakura Rain's eight chords, looping, on glass; a flute that waits; drops |
+| 10 | KUmeda | F♯ major pentatonic, 60 | Water, a slow string pad, a few glass notes; a soft theremin that waits |
 
-The recipes are in `firmware/src/dsp/amb.c` (`PC_LEEWARD` and on). They were set by measurement in the simulator, not
-by ear on two units: expect to tune levels and tempos on the hardware.
+The recipes are in `firmware/src/dsp/amb.c` (`PC_KTIMEWIND` and on). They were set by
+measurement in the simulator, not by ear on two units: expect to tune levels and tempos on the hardware.
 
 ## What it adds
 
 | | How | What it does |
 |---|---|---|
-| **Wait** | The Arc page (GLO twice), KNOB 1, Lead in: one step past Off | The Lead plays nothing of its own. Play three notes or more on the white keys and pause: it answers, and goes on growing ideas out of your figure for 45 to 150 seconds (the Memory knob), then is silent till you play again. Pieces 2, 5, 8, 9 and 10 start this way |
+| **Wait** | The Arc page (GLO twice), KNOB 1, Lead in: one step past Off | The Lead plays nothing of its own. Play three notes or more on the white keys and pause: it answers, and goes on growing ideas out of your figure for 45 to 150 seconds (the Memory knob), then is silent till you play again. KWahnfried, KStratosfear, KCyborg, KSakura Rain and KUmeda start this way |
 | **Conduct** | Hold EDIT, press a white key | The chord goes to that step of the scale at once (the first white key is home). For following the other unit by ear: it changes chord, one key puts this unit on the same one. With Drift at Hold the chord stays until your next key. Press the key within about a second of holding EDIT: EDIT held alone for 1.5 s still makes new chords, as in NACHTFAHRT |
 | **Section** | PERFORM (tap SEL), black keys 6 to 9 | Emerge, Flow, Solo, Bridge: the arc goes there now. The four are lit; the section playing blinks. Emerge restarts the arc (the intros close and open again) |
 | **Downbeat** | PERFORM (tap SEL), black key 10 | The bar starts from its top now, both sequences from their first step. Tap it on the other unit's downbeat to put the two in phase without a clock. Does nothing under an external MIDI clock |

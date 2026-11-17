@@ -29,7 +29,7 @@ int main(void)
             printf("FAIL %s: tempo %d\n", en_piece_name(i), pp[P_TEMPO]), fail = 1;
         if (pp[P_ROOT] != ROOT[i])
             printf("FAIL %s: root %d, not %d\n", en_piece_name(i), pp[P_ROOT], ROOT[i]), fail = 1;
-        if (!en_piece_name(i)[0] || strlen(en_piece_name(i)) > 11)
+        if (!en_piece_name(i)[0] || strlen(en_piece_name(i)) > 12)
             printf("FAIL piece %d: its name\n", i), fail = 1;
         for (p = 0; p < P_NPARAMS; p++)
             en_set(p, pp[p]);

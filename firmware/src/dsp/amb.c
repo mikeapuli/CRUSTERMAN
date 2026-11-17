@@ -239,7 +239,7 @@ static const struct {
  * other's. All between 60 and 74 (the set is played under 80, with no clock between the units): slow attacks, sparse
  * notes, nothing that needs the two grids to meet. Lead in at Wait where NACHTFAHRT's Lead is forward: this unit's
  * Lead silent till the keys play, then answering. */
-static const int16_t PC_LEEWARD[] = {         /* for Timewind (D minor, an organ through the phaser, 16/15, Wind): out
+static const int16_t PC_KTIMEWIND[] = {         /* for Timewind (D minor, an organ through the phaser, 16/15, Wind): out
                                                 * of the wind. Strings, glass lines of 13 and 11 an octave up, a flute */
     P_TEMPO, 72, P_ROOT, 2, P_MODE, MODE_AEOLIAN,
     P_SEQ, 65, P_SVOICE, 4, P_SEQOCT, 1, P_SEQLEN, 13, P_DENSITY, 35, P_DECAY, 60, P_CUTOFF, 50, P_MI1, 8,
@@ -249,7 +249,7 @@ static const int16_t PC_LEEWARD[] = {         /* for Timewind (D minor, an organ
     P_REVERB, 55, P_SIZE, 75,
     P_MW0, 20, P_MR0, 20, P_MW2, 10, P_BRIDGE, 30,
     P_ARC, 20, P_MOTION, 35, P_LMEM, 60, -1};
-static const int16_t PC_UNDERTOW[] = {        /* for Wahnfried (B flat Dorian, strings, a faint heartbeat, a theremin):
+static const int16_t PC_KWAHNFRIED[] = {        /* for Wahnfried (B flat Dorian, strings, a faint heartbeat, a theremin):
                                                 * the pulse under it. Plucked lines of 8 and 5, low, the Drone hardly
                                                 * more than its pedal, the Lead waiting */
     P_TEMPO, 60, P_ROOT, 10, P_MODE, MODE_DORIAN,
@@ -260,7 +260,7 @@ static const int16_t PC_UNDERTOW[] = {        /* for Wahnfried (B flat Dorian, s
     P_ECHO, 60, P_FEEDBACK, 65,
     P_MW0, 15, P_SWEEP, 40, P_MW3, 25, P_BRIDGE, 30,
     P_ARC, 20, P_MOTION, 40, P_LMEM, 50, -1};
-static const int16_t PC_SLACKWATER[] = {      /* for Phaedra (D minor, a busy Moog bass, choir and flutes): the still
+static const int16_t PC_KPHAEDRA[] = {      /* for Phaedra (D minor, a busy Moog bass, choir and flutes): the still
                                                 * water between tides. A horn drone whose filter is the movement, a
                                                 * few bells of 7 high up, no Sequence 2, a low gliding theremin, surf */
     P_TEMPO, 74, P_ROOT, 2, P_MODE, MODE_AEOLIAN,
@@ -272,7 +272,7 @@ static const int16_t PC_SLACKWATER[] = {      /* for Phaedra (D minor, a busy Mo
     P_REVERB, 55, P_SIZE, 80,
     P_MW0, 50, P_MT0, 70, P_MR0, 40, P_MW2, 10, P_MW4, 30, P_BRIDGE, 35,
     P_ARC, 15, P_MOTION, 35, P_LMEM, 45, -1};
-static const int16_t PC_PHOSPHOR[] = {        /* for Rubycon (F minor, dark, the 2600 two octaves down): light on the
+static const int16_t PC_KRUBYCON[] = {        /* for Rubycon (F minor, dark, the 2600 two octaves down): light on the
                                                 * water. Vibes of 5 and glass of 9 an octave up, a thin glass drone, a
                                                 * high flute, the second repeat a half note on */
     P_TEMPO, 72, P_ROOT, 5, P_MODE, MODE_AEOLIAN,
@@ -284,7 +284,7 @@ static const int16_t PC_PHOSPHOR[] = {        /* for Rubycon (F minor, dark, the
     P_REVERB, 50, P_SIZE, 70,
     P_MW0, 20, P_SWEEP, 35, P_MW3, 25, P_BRIDGE, 30,
     P_ARC, 25, P_MOTION, 40, P_LMEM, 55, -1};
-static const int16_t PC_BEDROCK[] = {         /* for Stratosfear (E minor, bright, driving, the Lead forward): what it
+static const int16_t PC_KSTRATOSFEAR[] = {         /* for Stratosfear (E minor, bright, driving, the Lead forward): what it
                                                 * stands on. A Moog line of 6 two octaves down, dark saws, no Sequence 2,
                                                 * the Lead waiting */
     P_TEMPO, 69, P_ROOT, 4, P_MODE, MODE_AEOLIAN,
@@ -295,7 +295,7 @@ static const int16_t PC_BEDROCK[] = {         /* for Stratosfear (E minor, brigh
     P_ECHO, 45,
     P_MW0, 40, P_MT0, 65, P_MR0, 35, P_BRIDGE, 40,
     P_ARC, 20, P_MOTION, 35, P_LMEM, 50, -1};
-static const int16_t PC_SALTPAN[] = {         /* for Sunrain (D major, both repeats at full, bright strings, surf): dry.
+static const int16_t PC_KSUNRAIN[] = {         /* for Sunrain (D major, both repeats at full, bright strings, surf): dry.
                                                 * D major pentatonic (no fourth, no seventh: nothing to rub against),
                                                 * marimbas of 7 and 5 with hardly an echo, a quiet organ, a reed */
     P_TEMPO, 65, P_ROOT, 2, P_MODE, MODE_PENT_MAJ,
@@ -306,7 +306,7 @@ static const int16_t PC_SALTPAN[] = {         /* for Sunrain (D major, both repe
     P_ECHO, 30, P_REVERB, 30,
     P_SWEEP, 25, P_MW3, 20, P_BRIDGE, 25,
     P_ARC, 20, P_MOTION, 35, P_LMEM, 65, -1};
-static const int16_t PC_EMBER[] = {           /* for Mirage (F sharp minor, icy glass, sparse, a long reverb): warmth.
+static const int16_t PC_KMIRAGE[] = {           /* for Mirage (F sharp minor, icy glass, sparse, a long reverb): warmth.
                                                 * F sharp minor pentatonic, a low dark organ, an electric piano of 5 an
                                                 * octave down, no Sequence 2, a low Mini, tape */
     P_TEMPO, 63, P_ROOT, 6, P_MODE, MODE_PENT_MIN,
@@ -318,7 +318,7 @@ static const int16_t PC_EMBER[] = {           /* for Mirage (F sharp minor, icy 
     P_REVERB, 40,
     P_MW0, 30, P_MR0, 25, P_MW2, 10, P_MW4, 20, P_BRIDGE, 30,
     P_ARC, 15, P_MOTION, 30, P_LMEM, 55, -1};
-static const int16_t PC_CARAPACE[] = {        /* for Cyborg (C Phrygian, organ drones beating, a quiet Sequence, no
+static const int16_t PC_KCYBORG[] = {        /* for Cyborg (C Phrygian, organ drones beating, a quiet Sequence, no
                                                 * Sequence 2, the theremin up front): the shell round it. A low pulse
                                                 * of 5 and a pluck of 7, a long echo, hardly a drone, the Lead (a choir)
                                                 * waiting */
@@ -330,7 +330,7 @@ static const int16_t PC_CARAPACE[] = {        /* for Cyborg (C Phrygian, organ d
     P_ECHO, 60, P_FEEDBACK, 70, P_ETIME, 4,
     P_SWEEP, 45, P_MW3, 30, P_MR3, 35, P_BRIDGE, 35,
     P_ARC, 25, P_MOTION, 40, P_LMEM, 40, -1};
-static const int16_t PC_PETRICHOR[] = {       /* for Sakura Rain (B flat Dorian, strings on the royal road, a low
+static const int16_t PC_KSAKURA[] = {       /* for Sakura Rain (B flat Dorian, strings on the royal road, a low
                                                 * theremin): the smell after it. The same eight chords, looping, on a
                                                 * thin glass drone; keys of 6 an octave up; a flute that waits and
                                                 * answers; drops */
@@ -348,7 +348,7 @@ static const int16_t PC_PETRICHOR[] = {       /* for Sakura Rain (B flat Dorian,
     P_REVERB, 50, P_SIZE, 70,
     P_MW0, 25, P_MR0, 25, P_MW4, 25, P_BRIDGE, 25,
     P_ARC, 15, P_MOTION, 30, P_LMEM, 50, -1};
-static const int16_t PC_TIDEPOOL[] = {        /* for Umeda (F sharp major pentatonic, the piano in the plaza): the water
+static const int16_t PC_KUMEDA[] = {        /* for Umeda (F sharp major pentatonic, the piano in the plaza): the water
                                                 * left behind. Water, a slow string pad, a few glass notes of 9, no
                                                 * Sequence 2, a soft high theremin that waits */
     P_TEMPO, 60, P_ROOT, 6, P_MODE, MODE_PENT_MAJ,
@@ -364,9 +364,11 @@ static const struct {
     const char *name;
     const int16_t *set;
 } PIECES[EN_NPIECES] = {
-    {"Leeward", PC_LEEWARD}, {"Undertow", PC_UNDERTOW}, {"Slack Water", PC_SLACKWATER}, {"Phosphor", PC_PHOSPHOR},
-    {"Bedrock", PC_BEDROCK}, {"Salt Pan", PC_SALTPAN}, {"Ember", PC_EMBER}, {"Carapace", PC_CARAPACE},
-    {"Petrichor", PC_PETRICHOR}, {"Tide Pool", PC_TIDEPOOL},
+    /* (the user, 2026-11-17: each named as NACHTFAHRT's piece it goes with, a K in front, to match them up at a
+     * glance) */
+    {"KTimewind", PC_KTIMEWIND}, {"KWahnfried", PC_KWAHNFRIED}, {"KPhaedra", PC_KPHAEDRA}, {"KRubycon", PC_KRUBYCON},
+    {"KStratosfear", PC_KSTRATOSFEAR}, {"KSunrain", PC_KSUNRAIN}, {"KMirage", PC_KMIRAGE}, {"KCyborg", PC_KCYBORG},
+    {"KSakura Rain", PC_KSAKURA}, {"KUmeda", PC_KUMEDA},
 };
 #endif
 
