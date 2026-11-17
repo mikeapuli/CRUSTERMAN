@@ -178,27 +178,32 @@ static const char *const KNOB_HELP[NVIEWS][4] = {   /* (BERLIN's, a row a view, 
  * colours, the Drone violet, the Sequence pink, the Lead gold, Sequence 2 cyan, the Atmosphere dim lavender; each with a
  * dark tint for the shapes at rest. (The names stay DUB-1's: K_PAD the Drone, K_BELL the Sequence, K_BASS the Lead,
  * K_PULSE Sequence 2, K_NOISE the Atmosphere.) */
-#define K_BG RGB(0, 0, 0)
-#define K_PANEL RGB(26, 23, 38)
-#define K_LINE RGB(46, 41, 66)
-#define K_DIM RGB(141, 127, 184)
-#define K_TEXT RGB(239, 231, 255)
-#define K_ACC RGB(127, 216, 255)         /* the accent: the page, the knob being turned, a message's word */
-#define K_BELL RGB(255, 106, 213)
-#define K_BELL_T RGB(96, 36, 82)
-#define K_PAD RGB(180, 140, 255)
-#define K_PAD_T RGB(58, 44, 96)
-#define K_PULSE RGB(127, 216, 255)
-#define K_PULSE_T RGB(36, 66, 84)
-#define K_BASS RGB(255, 210, 127)
-#define K_BASS_T RGB(98, 80, 44)
-#define K_FROST RGB(232, 92, 84)         /* dub hold */
-#define K_FROST_T RGB(128, 56, 52)
-#define K_RIM RGB(214, 124, 176)         /* the rim */
-#define K_RIM_T RGB(108, 58, 86)
-#define K_CLAP RGB(232, 206, 98)         /* the clap */
-#define K_CLAP_T RGB(108, 98, 48)
-#define K_NOISE RGB(186, 174, 156)       /* the noise (its level ring) */
+/* (CRUSTERMAN, 2026-11-17) its own colours, NACHTFAHRT's turned round the colour wheel: where NACHTFAHRT is night
+ * (black, lavender, cyan, pink), CRUSTERMAN is the ground under it, umber and bone, an amber accent; each layer the
+ * opposite hue of its NACHTFAHRT colour, softened off the raw complement (no lime): the Drone ochre (was violet), the
+ * Sequence jade (pink), the Lead slate blue (gold), Sequence 2 amber (cyan), hold teal (red). The same layer is in
+ * opposite colours on the two units, side by side */
+#define K_BG RGB(16, 8, 0)
+#define K_PANEL RGB(40, 28, 18)
+#define K_LINE RGB(72, 52, 36)
+#define K_DIM RGB(184, 150, 118)
+#define K_TEXT RGB(255, 240, 222)
+#define K_ACC RGB(255, 150, 72)          /* the accent: the page, the knob being turned, a message's word */
+#define K_BELL RGB(96, 220, 164)
+#define K_BELL_T RGB(30, 82, 60)
+#define K_PAD RGB(232, 190, 96)
+#define K_PAD_T RGB(92, 70, 30)
+#define K_PULSE RGB(255, 150, 72)
+#define K_PULSE_T RGB(92, 50, 24)
+#define K_BASS RGB(124, 166, 244)
+#define K_BASS_T RGB(40, 56, 96)
+#define K_FROST RGB(72, 208, 208)        /* dub hold */
+#define K_FROST_T RGB(28, 88, 92)
+#define K_RIM RGB(132, 200, 168)         /* the rim */
+#define K_RIM_T RGB(52, 92, 74)
+#define K_CLAP RGB(144, 152, 244)        /* the clap */
+#define K_CLAP_T RGB(52, 56, 104)
+#define K_NOISE RGB(150, 164, 186)       /* the noise (its level ring) */
 
 static struct {
     uint8_t view;
